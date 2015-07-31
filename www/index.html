@@ -42,6 +42,8 @@
       
       init_nodewebkit();
       
+      var rootpane = document.querySelector('#rootpane');
+      var printpane = document.querySelector('#printpane');
       var tabs = document.querySelector('#tabs');
       var editor = document.querySelector('#editor');
       var viewer = document.querySelector('#viewer');
@@ -49,15 +51,28 @@
       
       // shortcut
       window.onkeydown = function(e) {
-        if( e.keyCode === 83 && e.metaKey ) {
+        if( e.keyCode === 83 && (e.metaKey || e.ctrlKey) ) {
           e.stopPropagation();
           e.preventDefault();
           save();
-        } else if( e.keyCode === 219 && e.metaKey ) {
+        } else if( e.keyCode === 219 && (e.metaKey || e.ctrlKey) ) {
           tabs.select(0);
           editor.focus();
-        } else if( e.keyCode === 221 && e.metaKey ) {
+        } else if( e.keyCode === 221 && (e.metaKey || e.ctrlKey) ) {
           tabs.select(1);
+        } else if( e.keyCode === 80 && (e.metaKey || e.ctrlKey) ) {
+          var p = viewer.parentNode;
+          var otitle = document.title;
+          
+          rootpane.style.display = 'none';
+          printpane.style.display = 'block';
+          printpane.appendChild(viewer);
+          document.title = otitle.split('.')[0];
+          window.print();
+          document.title = otitle;
+          rootpane.style.display = '';
+          printpane.style.display = '';
+          p.appendChild(viewer);
         }
       }
       
@@ -78,8 +93,11 @@
       var current_src;
       window.load = function(src) {
         console.log('load', src);
-        editor.text = fs.readFileSync(path.resolve(process.cwd(), src)).toString();
+        var file = path.resolve(process.cwd(), src);
+        var filename = path.basename(file);
+        editor.text = fs.readFileSync(file).toString();
         current_src = src;
+        document.title = filename;
         editor.focus();
       };
       
@@ -124,7 +142,7 @@
         <x-tab href="#preview">Preview</x-tab>
       </x-tabs>
     </div>
-    <x-cards flex flexbox>
+    <x-cards id="cards" flex flexbox>
       <div flex flexbox>
         <x-ace-editor id="editor" theme="twilight" language="markdown" style="font-size:11px;"></x-ace-editor>
       </div>
@@ -136,5 +154,6 @@
       <copyright>gfm-writer © 2015 Attrs</copyright>
     </div>
   </div>
+  <div id="printpane"></div>
 </body>
 </html>

@@ -11,6 +11,10 @@ a, a:hover, a:active, a:focus {
   color: inherit;
 }
 
+#printpane {
+  display: none;
+}
+
 #rootpane[dark] {
   background-color: #272530;
   background-image: none;
