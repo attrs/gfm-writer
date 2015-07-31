@@ -18,48 +18,68 @@
   </style>
   
   <script>
-    // node-webkit
-    if( gui ) {
-      var close = document.querySelector('#app-close');
-      close.style.display = 'block';
-      close.addEventListener('click', function() {
-        gui.App.quit();
-      });
-    
-      var menu = new gui.Menu();
-    
-      // Add some items
-      menu.append(new gui.MenuItem({ label: 'Item A' }));
-      menu.append(new gui.MenuItem({ label: 'Item B' }));
-      menu.append(new gui.MenuItem({ type: 'separator' }));
-      menu.append(new gui.MenuItem({ label: 'Item C' }));
-    
-      document.body.addEventListener('contextmenu', function(ev) {
-        ev.preventDefault();
-        menu.popup(ev.x, ev.y);
-        return false;
-      });
-    }
-
     // detect node-webkit
-    var gui;
     (function() {
       if( window.require ) {
         try {
-          gui = require('nw.gui');
+          var gui = require('nw.gui');
+          
+          var close = document.querySelector('#app-close');
+          close.style.display = 'block';
+          close.addEventListener('click', function() {
+            gui.App.quit();
+          });
+    
+          var menu = new gui.Menu();
+    
+          // Add some items
+          menu.append(new gui.MenuItem({ label: 'Item A' }));
+          menu.append(new gui.MenuItem({ label: 'Item B' }));
+          menu.append(new gui.MenuItem({ type: 'separator' }));
+          menu.append(new gui.MenuItem({ label: 'Item C' }));
+    
+          document.body.addEventListener('contextmenu', function(ev) {
+            ev.preventDefault();
+            menu.popup(ev.x, ev.y);
+            return false;
+          });
         } catch(e) {}
       }
     });
-  
+    
     window.addEventListener('DOMContentLoaded', function() {
+      if( !window.FileReader ) return alert('browser does not support FileReader feature');
+      
       var tabs = document.querySelector('#tabs');
       var editor = document.querySelector('#editor');
       var viewer = document.querySelector('#viewer');
+      var holder = document.querySelector('#rootpane');
       
-      editor.src = 'https://raw.githubusercontent.com/joje6/gfm-writer/master/README.md';
+      holder.ondragover = function(e) {
+          this.className = 'hover';
+          return false;
+      };
+      holder.ondragend = function(e) {
+          this.className = '';
+          return false;
+      };
+      
+      holder.ondrop = function(e) {
+        e.preventDefault();
+        
+        var files = e.dataTransfer.files;
+        var file = files && files[0];
+        if( !file ) return;
+        
+        var reader = new FileReader(file);
+        reader.onload = function(e) {
+          editor.text = e.target.result;
+          viewer.markdown = e.target.result;
+        };
+        reader.readAsText(file);
+      };
       
       tabs.addEventListener('tabchange', function(e) {
-        //console.log('text', editor.text);
         viewer.markdown = editor.text;
       });
     });
