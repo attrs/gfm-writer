@@ -1,0 +1,19 @@
+{
+  "name": "gfm-writer",
+  "private": true,
+  "homepage": "https://github.com/joje6/gfm-writer",
+  "authors": [
+    "joje <joje.attrs@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ui-aliens": "~0.1.3"
+  }
+}

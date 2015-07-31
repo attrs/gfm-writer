@@ -1,0 +1,60 @@
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 9pt;
+}
+
+a, a:hover, a:active, a:focus {
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+#rootpane[dark] {
+  background-color: #272530;
+  background-image: none;
+  color: #efeaea;
+}
+
+#rootpane[gradation] {
+  background-color: #333;
+  background-image: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), linear-gradient(to bottom, rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), linear-gradient(135deg, #670d10 0%,#092756 100%);
+  color: #efeaea;
+}
+
+#header {
+  -webkit-app-region: drag;
+  cursor: pointer;
+}
+
+#include {
+}
+
+#footer {
+  border-top: 1px solid rgba(127,127,127,0.15);
+  padding: 10px;
+  font-size: 0.95em;
+}
+
+#footer x-label {
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+#footer copyright {
+  float: right;
+  font-weight: 100;
+}
+
+#login {
+  width: 320px;
+}
+
+#app-close {
+  display: none;
+  position: absolute;
+  z-index: 9000;
+  right: 7px;
+  top: 4px;
+}

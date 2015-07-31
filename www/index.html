@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>GFM Writer</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="ui-alien.debug" content="false">
+  
+  <link rel="import" href="../bower_components/ui-aliens/dist/ui-aliens.min.inline.html">
+  <link rel="import" href="../bower_components/ui-aliens/dist/extra/markdown/x-markdown.html">
+  <link rel="import" href="../bower_components/ui-aliens/dist/extra/ace-editor/x-ace-editor.html">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <style media="print">
+    
+  </style>
+  
+  <script>
+    // node-webkit
+    if( gui ) {
+      var close = document.querySelector('#app-close');
+      close.style.display = 'block';
+      close.addEventListener('click', function() {
+        gui.App.quit();
+      });
+    
+      var menu = new gui.Menu();
+    
+      // Add some items
+      menu.append(new gui.MenuItem({ label: 'Item A' }));
+      menu.append(new gui.MenuItem({ label: 'Item B' }));
+      menu.append(new gui.MenuItem({ type: 'separator' }));
+      menu.append(new gui.MenuItem({ label: 'Item C' }));
+    
+      document.body.addEventListener('contextmenu', function(ev) {
+        ev.preventDefault();
+        menu.popup(ev.x, ev.y);
+        return false;
+      });
+    }
+
+    // detect node-webkit
+    var gui;
+    (function() {
+      if( window.require ) {
+        try {
+          gui = require('nw.gui');
+        } catch(e) {}
+      }
+    });
+  
+    window.addEventListener('DOMContentLoaded', function() {
+      var tabs = document.querySelector('#tabs');
+      var editor = document.querySelector('#editor');
+      var viewer = document.querySelector('#viewer');
+      
+      editor.src = 'https://raw.githubusercontent.com/joje6/gfm-writer/master/README.md';
+      
+      tabs.addEventListener('tabchange', function(e) {
+        //console.log('text', editor.text);
+        viewer.markdown = editor.text;
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="rootpane" dark flexbox fit>
+    <x-close id="app-close"></x-close>
+    <div id="header">
+      <x-tabs id="tabs" equally connect="x-cards">
+        <x-tab href="#editor">Editor</x-tab>
+        <x-tab href="#preview">Preview</x-tab>
+      </x-tabs>
+    </div>
+    <x-cards flex flexbox>
+      <div flex flexbox>
+        <x-ace-editor id="editor" theme="twilight" language="markdown" style="font-size:11px;"></x-ace-editor>
+      </div>
+      <div flex style="background-color:white;overflow:auto;">
+        <x-markdown id="viewer" style="padding: 20px;"></x-markdown>
+      </div>
+    </x-cards>
+    <div id="footer">
+      <copyright>gfm-writer © 2015 Attrs</copyright>
+    </div>
+  </div>
+</body>
+</html>

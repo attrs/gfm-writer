@@ -1,0 +1,27 @@
+{
+  "name": "gfm-writer",
+  "version": "0.0.0",
+  "description": "GitHub Flavored Markdown Editor",
+  "scripts": {
+    "start": "node_modules/nodewebkit/bin/nodewebkit"
+  },
+  "main": "www/index.html",
+  "window": {
+    "transparent": true,
+    "toolbar": false,
+    "frame": false,
+    "width": 1000,
+    "height": 700
+  },
+  "author": "joje <joje.attrs@gmail.com>",
+  "homepage": "http://joje6.github.io/gfm-writer",
+  "repository": "joje6/gfm-writer",
+  "license": "MIT",
+  "keywords": [
+    "gfm",
+    "markdown"
+  ],
+  "dependencies": {
+    "nodewebkit": "^0.11.6"
+  }
+}
