@@ -17,29 +17,54 @@
     
   </style>
   
-  <script>    
+  <script>
+    function init_nodewebkit() {
+      var gui = require('nw.gui');
+      
+      var menu = new gui.Menu();
+      menu.append(new gui.MenuItem({ label: 'Item A' }));
+      menu.append(new gui.MenuItem({ label: 'Item B' }));
+      menu.append(new gui.MenuItem({ type: 'separator' }));
+      menu.append(new gui.MenuItem({ label: 'Item C' }));
+
+      document.body.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        menu.popup(e.x, e.y);
+        return false;
+      });
+    }
+  
     window.addEventListener('DOMContentLoaded', function() {
-      // detect node-webkit
-      (function() {
-        var gui = require('nw.gui');
-
-        var menu = new gui.Menu();
-        menu.append(new gui.MenuItem({ label: 'Item A' }));
-        menu.append(new gui.MenuItem({ label: 'Item B' }));
-        menu.append(new gui.MenuItem({ type: 'separator' }));
-        menu.append(new gui.MenuItem({ label: 'Item C' }));
-
-        document.body.addEventListener('contextmenu', function(e) {
-          e.preventDefault();
-          menu.popup(e.x, e.y);
-          return false;
-        });
-      })();
+      var gui = require('nw.gui');
+      var fs = require('fs');
+      var path = require('path');
+      var argv = gui.App.argv;
+      
+      init_nodewebkit();
       
       var tabs = document.querySelector('#tabs');
       var editor = document.querySelector('#editor');
       var viewer = document.querySelector('#viewer');
       var holder = document.querySelector('#rootpane');
+      
+      // shortcut
+      window.onkeydown = function(e) {
+        if( e.keyCode === 83 && e.metaKey ) {
+          e.stopPropagation();
+          e.preventDefault();
+          save();
+        } else if( e.keyCode === 219 && e.metaKey ) {
+          tabs.select(0);
+          editor.focus();
+        } else if( e.keyCode === 221 && e.metaKey ) {
+          tabs.select(1);
+        }
+      }
+      
+      // editor 가 변경되면 뷰어도 변경한다.
+      editor.addEventListener('reset', function(e) {
+        viewer.markdown = e.detail.text;
+      });
       
       holder.ondragover = function(e) {
           this.className = 'hover';
@@ -50,6 +75,23 @@
           return false;
       };
       
+      var current_src;
+      window.load = function(src) {
+        console.log('load', src);
+        editor.text = fs.readFileSync(path.resolve(process.cwd(), src)).toString();
+        current_src = src;
+        editor.focus();
+      };
+      
+      window.save = function() {
+        console.log('save', current_src);
+        if( current_src ) {
+          fs.writeFileSync(current_src, editor.text);
+        }
+      };
+      
+      if( argv[0] ) window.load(argv[0]);
+      
       holder.ondrop = function(e) {
         e.preventDefault();
         
@@ -57,14 +99,17 @@
         var file = files && files[0];
         if( !file ) return;
         
-        var reader = new FileReader(file);
-        reader.onload = function(e) {
-          editor.text = e.target.result;
-          viewer.markdown = e.target.result;
-        };
-        reader.readAsText(file);
+        if( file.path ) {
+          load(file.path);
+        } else {
+          // generic browser
+          var reader = new FileReader(file);
+          reader.onload = function(e) {
+            editor.text = e.target.result;
+          };
+          reader.readAsText(file);
+        }
       };
-      
       tabs.addEventListener('tabchange', function(e) {
         viewer.markdown = editor.text;
       });

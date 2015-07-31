@@ -5,6 +5,9 @@
   "scripts": {
     "start": "node_modules/nodewebkit/bin/nodewebkit"
   },
+  "bin": {
+    "gfmw": "bin/gfmw.js"
+  },
   "main": "www/index.html",
   "window": {
     "transparent": false,
