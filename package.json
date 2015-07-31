@@ -1,5 +1,5 @@
 {
-  "name": "gfm-writer",
+  "name": "gfmw",
   "version": "0.0.1",
   "description": "GitHub Flavored Markdown Editor",
   "scripts": {
@@ -17,8 +17,8 @@
     "height": 700
   },
   "author": "joje <joje.attrs@gmail.com>",
-  "homepage": "http://joje6.github.io/gfm-writer",
-  "repository": "joje6/gfm-writer",
+  "homepage": "http://joje6.github.io/gfmw",
+  "repository": "joje6/gfmw",
   "license": "MIT",
   "keywords": [
     "gfm",
