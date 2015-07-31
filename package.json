@@ -1,6 +1,6 @@
 {
   "name": "gfmw",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "GitHub Flavored Markdown Editor",
   "scripts": {
     "start": "node_modules/nodewebkit/bin/nodewebkit"
