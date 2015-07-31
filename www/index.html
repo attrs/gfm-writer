@@ -17,38 +17,24 @@
     
   </style>
   
-  <script>
-    // detect node-webkit
-    (function() {
-      if( window.require ) {
-        try {
-          var gui = require('nw.gui');
-          
-          var close = document.querySelector('#app-close');
-          close.style.display = 'block';
-          close.addEventListener('click', function() {
-            gui.App.quit();
-          });
-    
-          var menu = new gui.Menu();
-    
-          // Add some items
-          menu.append(new gui.MenuItem({ label: 'Item A' }));
-          menu.append(new gui.MenuItem({ label: 'Item B' }));
-          menu.append(new gui.MenuItem({ type: 'separator' }));
-          menu.append(new gui.MenuItem({ label: 'Item C' }));
-    
-          document.body.addEventListener('contextmenu', function(ev) {
-            ev.preventDefault();
-            menu.popup(ev.x, ev.y);
-            return false;
-          });
-        } catch(e) {}
-      }
-    });
-    
+  <script>    
     window.addEventListener('DOMContentLoaded', function() {
-      if( !window.FileReader ) return alert('browser does not support FileReader feature');
+      // detect node-webkit
+      (function() {
+        var gui = require('nw.gui');
+
+        var menu = new gui.Menu();
+        menu.append(new gui.MenuItem({ label: 'Item A' }));
+        menu.append(new gui.MenuItem({ label: 'Item B' }));
+        menu.append(new gui.MenuItem({ type: 'separator' }));
+        menu.append(new gui.MenuItem({ label: 'Item C' }));
+
+        document.body.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+          menu.popup(e.x, e.y);
+          return false;
+        });
+      })();
       
       var tabs = document.querySelector('#tabs');
       var editor = document.querySelector('#editor');
@@ -87,7 +73,6 @@
 </head>
 <body>
   <div id="rootpane" dark flexbox fit>
-    <x-close id="app-close"></x-close>
     <div id="header">
       <x-tabs id="tabs" equally connect="x-cards">
         <x-tab href="#editor">Editor</x-tab>

@@ -7,9 +7,9 @@
   },
   "main": "www/index.html",
   "window": {
-    "transparent": true,
+    "transparent": false,
     "toolbar": false,
-    "frame": false,
+    "frame": true,
     "width": 1000,
     "height": 700
   },
