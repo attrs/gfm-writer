@@ -93,7 +93,7 @@
       var current_src;
       window.load = function(src) {
         console.log('load', src);
-        var file = path.resolve(process.cwd(), src);
+        var file = path.resolve((process.env.PWD || process.cwd()), src);
         var filename = path.basename(file);
         editor.text = fs.readFileSync(file).toString();
         current_src = src;

@@ -15,7 +15,8 @@ for(var i=2; i < argv.length; i++) {
   argc.push(argv[i]);
 }
 
-console.log('argc', argc);
+console.log('nwpath', nwpath);
+console.log('cwd', process.cwd());
 
 spawn(nwpath, argc, {
   cwd: process.cwd(),
