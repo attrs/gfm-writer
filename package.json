@@ -6,7 +6,7 @@
     "start": "node_modules/nodewebkit/bin/nodewebkit"
   },
   "bin": {
-    "gfmw": "bin/gfmw.js"
+    "gfmw": "bin/gfmw"
   },
   "main": "www/index.html",
   "window": {

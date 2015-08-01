@@ -28,7 +28,6 @@ a, a:hover, a:active, a:focus {
 }
 
 #header {
-  -webkit-app-region: drag;
   cursor: pointer;
 }
 
@@ -36,9 +35,10 @@ a, a:hover, a:active, a:focus {
 }
 
 #footer {
+  -webkit-app-region: drag;
   border-top: 1px solid rgba(127,127,127,0.15);
-  padding: 10px;
-  font-size: 0.95em;
+  padding: 6px;
+  font-size: 0.9em;
 }
 
 #footer x-label {

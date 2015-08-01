@@ -137,19 +137,22 @@
 <body>
   <div id="rootpane" dark flexbox fit>
     <div id="header">
+      <x-tabs id="filetabs"></x-tabs>
+    </div>
+    <div flex flexbox>
+      <x-cards id="cards" flex flexbox>
+        <div flex flexbox>
+          <x-ace-editor id="editor" theme="twilight" language="markdown" style="font-size:11px;"></x-ace-editor>
+        </div>
+        <div flex style="background-color:white;overflow:auto;">
+          <x-markdown id="viewer" style="padding: 20px;"></x-markdown>
+        </div>
+      </x-cards>
       <x-tabs id="tabs" equally connect="x-cards">
         <x-tab href="#editor">Editor</x-tab>
         <x-tab href="#preview">Preview</x-tab>
       </x-tabs>
     </div>
-    <x-cards id="cards" flex flexbox>
-      <div flex flexbox>
-        <x-ace-editor id="editor" theme="twilight" language="markdown" style="font-size:11px;"></x-ace-editor>
-      </div>
-      <div flex style="background-color:white;overflow:auto;">
-        <x-markdown id="viewer" style="padding: 20px;"></x-markdown>
-      </div>
-    </x-cards>
     <div id="footer">
       <copyright>gfm-writer © 2015 Attrs</copyright>
     </div>
