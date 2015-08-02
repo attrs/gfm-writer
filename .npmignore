@@ -8,6 +8,7 @@ Makefile
 Gruntfile.js
 examples/
 node_modules/
+.nw-builder/
 
 deprecated/
 examples/
@@ -19,3 +20,4 @@ support/
 test/
 .plexi/
 logs/
+dist/

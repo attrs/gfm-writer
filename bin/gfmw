@@ -1,24 +1,22 @@
 #!/usr/bin/env node
 
-var findpath = require('nodewebkit').findpath;
-var spawn = require('child_process').spawn;
+var NwBuilder = require('nw-builder');
+var pkg = require('../package.json');
 var path = require('path');
+var osenv = require('osenv');
 
-process.title = 'GFM Writer';
+var HOME = osenv.home() || path.resolve(__dirname, '..');
 
-var nwpath = findpath();
-var apppath = path.resolve(__dirname, '../');
-var argv = process.argv;
-var argc = [apppath];
-
-for(var i=2; i < argv.length; i++) {
-  argc.push(argv[i]);
-}
-
-console.log('nwpath', nwpath);
-console.log('cwd', process.cwd());
-
-spawn(nwpath, argc, {
-  cwd: process.cwd(),
-  stdio: 'inherit'
+var nw = new NwBuilder({
+  appName: 'GFM Writer',
+  appVersion: pkg.version,
+  version: '0.12.3',
+  files: path.resolve(__dirname, '../app/**'),
+  cacheDir: path.resolve(HOME, './.nw-builder')
+}).on('log', function (msg) {
+  console.log(msg);
+}).run(function(err) {
+  if( err ) return console.error(err);
+  
+  console.log('gfmw start!');
 });
