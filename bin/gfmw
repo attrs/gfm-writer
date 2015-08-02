@@ -3,11 +3,22 @@
 var NwBuilder = require('nw-builder');
 var pkg = require('../package.json');
 var path = require('path');
+var fs = require('fs');
 var osenv = require('osenv');
 
 var HOME = osenv.home() || path.resolve(__dirname, '..');
 
 console.log('argv', process.argv.slice(2));
+
+var argc = [];
+process.argv.slice(2).forEach(function(arg) {
+  var file = path.resolve(process.cwd(), arg);
+  if( fs.existsSync(file) && fs.statSync(file).isFile ) {
+    argc.push(file);
+  }
+});
+
+console.log('argc', argc);
 
 var nw = new NwBuilder({
   appName: 'GFM Writer',
