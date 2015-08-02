@@ -26,11 +26,9 @@ var nw = new NwBuilder({
   version: '0.12.3',
   files: path.resolve(__dirname, '../app/**'),
   cacheDir: path.resolve(HOME, './.nw-builder'),
-  argv: process.argv.slice(2)
+  argv: argc
 }).on('log', function (msg) {
   console.log(msg);
 }).run(function(err) {
   if( err ) return console.error(err);
-  
-  console.log('gfmw start!');
 });
