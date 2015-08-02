@@ -21,7 +21,7 @@
     function init_nodewebkit() {
       var gui = require('nw.gui');
       
-      var menu = new gui.Menu();
+      /*var menu = new gui.Menu();
       menu.append(new gui.MenuItem({ label: 'Item A' }));
       menu.append(new gui.MenuItem({ label: 'Item B' }));
       menu.append(new gui.MenuItem({ type: 'separator' }));
@@ -31,7 +31,20 @@
         e.preventDefault();
         menu.popup(e.x, e.y);
         return false;
+      });*/
+      
+      var win = gui.Window.get();
+      var nativeMenuBar = new gui.Menu({
+          type: "menubar"
       });
+
+      // check operating system for the menu
+      if (process.platform === "darwin") {
+          nativeMenuBar.createMacBuiltin("GFM Writer");
+      }
+
+      // actually assign menu to window
+      win.menu = nativeMenuBar;
     }
   
     window.addEventListener('DOMContentLoaded', function() {
@@ -164,7 +177,7 @@
       </x-tabs>
     </div>
     <div id="footer">
-      <copyright>gfm-writer © 2015 Attrs</copyright>
+      <copyright>gfm-writer © 2015</copyright>
     </div>
   </div>
   <div id="printpane"></div>
