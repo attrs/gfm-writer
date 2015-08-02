@@ -13,9 +13,9 @@ gulp.task('build', function () {
     appVersion: pkg.version,
     version: '0.12.3',
     files: './app/**',
+    buildDir: './dist',
     macIcns: './app/icons/gfmw.icns',
     //winIco: './app/icons/gfmw.ico',
-    buildDir: './dist',
     cacheDir: path.resolve(HOME, './.nw-builder'),
     platforms: ['win', 'osx', 'linux']
   });

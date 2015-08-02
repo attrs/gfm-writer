@@ -7,12 +7,15 @@ var osenv = require('osenv');
 
 var HOME = osenv.home() || path.resolve(__dirname, '..');
 
+console.log('argv', process.argv.slice(2));
+
 var nw = new NwBuilder({
   appName: 'GFM Writer',
   appVersion: pkg.version,
   version: '0.12.3',
   files: path.resolve(__dirname, '../app/**'),
-  cacheDir: path.resolve(HOME, './.nw-builder')
+  cacheDir: path.resolve(HOME, './.nw-builder'),
+  argv: process.argv.slice(2)
 }).on('log', function (msg) {
   console.log(msg);
 }).run(function(err) {
