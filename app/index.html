@@ -51,7 +51,7 @@
             if( e.keyCode === 83 && (e.metaKey || e.ctrlKey) ) {
               e.stopPropagation();
               e.preventDefault();
-              save();
+              self.save();
             } else if( e.keyCode === 219 && (e.metaKey || e.ctrlKey) ) {
               tabs.select(0);
               editor.focus();
@@ -89,103 +89,109 @@
           return arg;
         },
         open: function(options, done) {
-          if( typeof options === 'string' ) options = {src: options};
-          if( typeof options !== 'object' ) throw new TypeError('options must be an object');
+          try {
+            if( typeof options === 'string' ) options = {src: options};
+            if( typeof options !== 'object' ) throw new TypeError('options must be an object');
           
-          // create item
-          var id = 'tab-' + (seq++);
-          var name = options.name;
-          var src = options.src;
-          var source = options.source;
+            // create item
+            var id = 'tab-' + (seq++);
+            var name = options.name;
+            var src = options.src;
+            var source = options.source;
           
-          // load source
-          if( src ) {
-            if( src.indexOf('file://') === 0 ) {
-              if( !path || !fs ) throw new Error('path & fs is only supported node-webkit mode');
-              var file = path.resolve(cwd, src.substring(7));
-              console.log('file', file);
-              if( fs.existsSync(file) ) {
-                source = fs.readFileSync(file).toString();
-                name = name || path.basename(file);
+            // load source
+            if( src ) {
+              if( src.indexOf('file://') === 0 ) {
+                if( !path || !fs ) throw new Error('path & fs is only supported node-webkit mode');
+                var file = path.resolve(cwd, src.substring(7));
+                console.log('file', file);
+                if( fs.existsSync(file) ) {
+                  source = fs.readFileSync(file).toString();
+                  name = name || path.basename(file);
+                }
+              } else if( src.indexOf('local://') === 0 ) {
+                // TODO: source from local storage
+              } else if( typeof src === 'text' ) {
+                source = src;
               }
-            } else if( src.indexOf('local://') === 0 ) {
-              // TODO: source from local storage
-            } else if( typeof src === 'text' ) {
-              source = src;
             }
-          }
           
-          // create dom
-          var tab = document.createElement('x-tab');
-          tab.setAttribute('closable', '');
-          tab.innerHTML = name || '(untitled)';
+            // create dom
+            var tab = document.createElement('x-tab');
+            tab.setAttribute('closable', '');
+            tab.innerHTML = name || '(untitled)';
           
-          var card = document.createElement('div');
-          card.setAttribute('id', id);
-          card.setAttribute('flexbox', '');
-          card.setAttribute('flex', '');
-          card.innerHTML = '<x-cards flex flexbox>\
-              <div flex flexbox>\
-                <x-ace-editor theme="twilight" language="markdown" style="font-size:11px;"></x-ace-editor>\
-              </div>\
-              <div flex style="background-color:white;overflow:auto;">\
-                <x-markdown id="viewer" style="padding: 20px;"></x-markdown>\
-              </div>\
-            </x-cards>\
-            <x-tabs equally connect="x-cards">\
-              <x-tab href="#editor">Editor</x-tab>\
-              <x-tab href="#preview">Preview</x-tab>\
-            </x-tabs>\
-          </div>';
+            var card = document.createElement('div');
+            card.setAttribute('id', id);
+            card.setAttribute('flexbox', '');
+            card.setAttribute('flex', '');
+            card.innerHTML = '<x-cards flex flexbox>\
+                <div flex flexbox>\
+                  <x-ace-editor theme="twilight" language="markdown" style="font-size:11px;"></x-ace-editor>\
+                </div>\
+                <div flex style="background-color:white;overflow:auto;">\
+                  <x-markdown id="viewer" style="padding: 20px;"></x-markdown>\
+                </div>\
+              </x-cards>\
+              <x-tabs equally connect="x-cards">\
+                <x-tab href="#editor">Editor</x-tab>\
+                <x-tab href="#preview">Preview</x-tab>\
+              </x-tabs>\
+            </div>';
           
-          var tabs = card.querySelector('x-tabs');
-          var viewer = card.querySelector('x-markdown');
-          var editor = card.querySelector('x-ace-editor');
+            var tabs = card.querySelector('x-tabs');
+            var viewer = card.querySelector('x-markdown');
+            var editor = card.querySelector('x-ace-editor');
           
-          // editor 가 변경되면 뷰어도 변경한다.
-          editor.addEventListener('reset', function(e) {
-            viewer.markdown = e.detail.text;
-          });
-          
-          tabs.addEventListener('tabchange', function(e) {
-            viewer.markdown = editor.text;
-          });
-          
-          // append to stage
-          var maintabs = document.querySelector('#tabs');
-          var container = document.querySelector('#container');
-          maintabs.appendChild(tab);
-          container.appendChild(card);
-          
-          editor.text = source || '';
-          
-          this.items[id] = {
-            id: id,
-            name: name,
-            src: src,
-            source: source,
-            card: card,
-            tab: tab,
-            tabs: tabs,
-            editor: editor,
-            viewer: viewer
-          };
-          
-          this.select(id);
-          
-          // context menu
-          if( gui ) {
-            var menu = new gui.Menu();
-            menu.append(new gui.MenuItem({ label: 'Item A' }));
-            menu.append(new gui.MenuItem({ label: 'Item B' }));
-            menu.append(new gui.MenuItem({ type: 'separator' }));
-            menu.append(new gui.MenuItem({ label: 'Item C' }));
-
-            editor.addEventListener('contextmenu', function(e) {
-              e.preventDefault();
-              menu.popup(e.x, e.y);
-              return false;
+            // editor 가 변경되면 뷰어도 변경한다.
+            editor.addEventListener('reset', function(e) {
+              viewer.markdown = e.detail.text;
             });
+          
+            tabs.addEventListener('tabchange', function(e) {
+              viewer.markdown = editor.text;
+            });
+          
+            // append to stage
+            var maintabs = document.querySelector('#tabs');
+            var container = document.querySelector('#container');
+            maintabs.appendChild(tab);
+            container.appendChild(card);
+          
+            editor.text = source || '';
+          
+            this.items[id] = {
+              id: id,
+              name: name,
+              src: src,
+              source: source,
+              card: card,
+              tab: tab,
+              tabs: tabs,
+              editor: editor,
+              viewer: viewer
+            };
+          
+            this.select(id);
+          
+            // context menu
+            if( gui ) {
+              var menu = new gui.Menu();
+              menu.append(new gui.MenuItem({ label: 'Item A' }));
+              menu.append(new gui.MenuItem({ label: 'Item B' }));
+              menu.append(new gui.MenuItem({ type: 'separator' }));
+              menu.append(new gui.MenuItem({ label: 'Item C' }));
+
+              editor.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                menu.popup(e.x, e.y);
+                return false;
+              });
+            }
+            
+            if( typeof done === 'function' ) done(null, item);
+          } catch(err) {
+            if( typeof done === 'function' ) done(err);
           }
         },
         get selected() {
@@ -208,9 +214,27 @@
           return false;
         },
         save: function(id, done) {
-          console.log('save', current_src);
-          if( current_src ) {
-            fs.writeFileSync(current_src, editor.text);
+          try {
+            if( !arguments.length ) id = this.selectedId;
+            if( !id ) throw new Error('missing id');
+              
+            var item = this.items[id];
+            if( !item ) throw new Error('not exists id:' + id);
+            
+            var src = item.src;
+            if( src ) {
+              if( src.indexOf('file://') === 0 ) {
+                fs.writeFileSync(item.src.substring(7), item.editor.text);
+              } else {
+                throw new Error('\"' + src + '\" is unknown scheme type');
+              }
+            } else {
+              throw new Error('\"' + id + '\" tab is readonly');
+            }
+            
+            if( typeof done === 'function' ) done();
+          } catch(err) {
+            if( typeof done === 'function' ) done(err);
           }
         }
       };
