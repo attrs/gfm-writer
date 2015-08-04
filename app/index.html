@@ -30,11 +30,12 @@
     
       function Workbench() {
         if( gui ) {
-          var menu = gui.Window.get().menu = new gui.Menu({
-              type: 'menubar'
+          var menu = new gui.Menu({
+            type: 'menubar'
           });
-          if (process.platform === "darwin")
-            menu.createMacBuiltin("GFM Writer");
+          if (process.platform === "darwin") menu.createMacBuiltin("GFM Writer");
+          
+          gui.Window.get().menu = menu;
         }
 
         var self = this;
