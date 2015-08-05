@@ -4,24 +4,25 @@ var gutil = require('gulp-util');
 var pkg = require('./package.json');
 var path = require('path');
 var fs = require('fs');
-var uuid = require('uuid');
 var osenv = require('osenv');
+var wrench = require('wrench');
+var uuid = require('uuid');
 var msi = require('msi-packager');
 
 // common variables
 var appName = 'GFM Writer';
-var GUID = uuid.v4();
 var HOME = osenv.home() || __dirname;
-  
-console.log('GUID', GUID);
+var TARGET = path.resolve(__dirname, 'build');
 
 gulp.task('build', function(done) {
+  wrench.rmdirSyncRecursive(TARGET);
+  
   var nw = new NwBuilder({
     appName: appName,
     appVersion: pkg.version,
     version: '0.12.3',
     files: './app/**',
-    buildDir: './build',
+    buildDir: TARGET,
     macIcns: './app/icons/gfmw.icns',
     winIco: './app/icons/gfmw.ico',
     cacheDir: path.resolve(HOME, './.nw-builder'),
@@ -44,7 +45,10 @@ gulp.task('build', function(done) {
 });
 
 gulp.task('build.msi', ['build'], function(done) {
-  var source = path.resolve(__dirname, './build/' + appName + '/');
+  var GUID = uuid.v4();
+  gutil.log('msi-packager', GUID);
+  
+  var source = path.resolve(TARGET, appName);
   if( !fs.existsSync(path.resolve(source, 'win64')) ) return done(new Error('source dir "' + path.resolve(source, 'win64') + '" not found'));
   if( !fs.existsSync(path.resolve(source, 'win32')) ) return done(new Error('source dir "' + path.resolve(source, 'win32') + '" not found'));
   
