@@ -30,8 +30,8 @@
   },
   "files": [
     "bin",
-    "app/package.json"
-    "app/*.html"
+    "app/package.json",
+    "app/*.html",
     "app/css/**/**",
     "app/js/**/**",
     "app/images/**/**",

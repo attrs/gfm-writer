@@ -47,6 +47,10 @@
             self.selectedId = e.detail.selected.id;
           });
           
+          gui.App.on('open', function(cmdline) {
+            console.log('command line: ' + cmdline);
+          });
+          
           // shortcut
           window.onkeydown = function(e) {
             var selected = self.selected;
@@ -104,10 +108,10 @@
           try {
             if( typeof options === 'string' ) options = {src: options};
             options = options || {};
-          
+            
             // create item
             var id = 'tab-' + (seq++);
-            var title = options.title || 'untitled';
+            var title = options.title;
             var src = options.src;
             var source = options.source;
           
@@ -127,6 +131,8 @@
                 source = src;
               }
             }
+            
+            title = title || 'untitled';
           
             // create dom
             var tab = document.createElement('x-tab');

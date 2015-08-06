@@ -54,7 +54,7 @@ gulp.task('build.msi', ['build'], function(done) {
   
   msi({
     source: path.resolve(source, 'win64'),
-    output: path.resolve(source, appName + '-' + pkg.version + '-x64.msi'),
+    output: path.resolve(source, appName + '-' + pkg.version + '-win64.msi'),
     name: appName,
     upgradeCode: GUID,
     version: pkg.version,
@@ -69,7 +69,7 @@ gulp.task('build.msi', ['build'], function(done) {
     
     msi({
       source: path.resolve(source, 'win32'),
-      output: path.resolve(source, appName + '-' + pkg.version + '-x86.msi'),
+      output: path.resolve(source, appName + '-' + pkg.version + '-win32.msi'),
       name: appName,
       upgradeCode: GUID,
       version: pkg.version,
