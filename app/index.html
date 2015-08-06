@@ -7,10 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="ui-alien.debug" content="false">
   
-  <link rel="import" href="bower_components/ui-aliens/dist/ui-aliens.min.inline.html">
-  <link rel="import" href="bower_components/ui-aliens/dist/extra/markdown/x-markdown.html">
-  <link rel="import" href="bower_components/ui-aliens/dist/extra/ace-editor/x-ace-editor.html">
-  <link rel="stylesheet" href="style.css">
+  <link rel="import" href="libs/ui-aliens/dist/ui-aliens.min.inline.html">
+  <link rel="import" href="libs/ui-aliens/dist/extra/markdown/x-markdown.html">
+  <link rel="import" href="libs/ui-aliens/dist/extra/ace-editor/x-ace-editor.html">
+  <link rel="stylesheet" href="css/style.css">
   
   <script>
     var workbench = (function() {
@@ -103,11 +103,11 @@
         open: function(options, done) {
           try {
             if( typeof options === 'string' ) options = {src: options};
-            if( typeof options !== 'object' ) throw new TypeError('options must be an object');
+            options = options || {};
           
             // create item
             var id = 'tab-' + (seq++);
-            var title = options.title;
+            var title = options.title || 'untitled';
             var src = options.src;
             var source = options.source;
           
@@ -132,7 +132,7 @@
             var tab = document.createElement('x-tab');
             tab.setAttribute('id', id);
             tab.setAttribute('closable', '');
-            tab.innerHTML = title || '(untitled)';
+            tab.innerHTML = title;
           
             var card = document.createElement('div');
             card.setAttribute('flexbox', '');
@@ -215,7 +215,7 @@
             var tabs = document.querySelector('#tabs');
             tabs.select(item.tab);
             
-            document.title = item.title || '(untitled)';
+            document.title = item.title;
             item.editor.focus();
             return true;
           }
@@ -256,6 +256,8 @@
             workbench.open('file://' + file);
           }
         });
+        
+        if( !argv || !argv.length ) workbench.open();
         
         var holder = document.querySelector('#rootpane');
         holder.ondragover = function(e) {

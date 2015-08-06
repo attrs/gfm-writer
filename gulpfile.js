@@ -21,7 +21,7 @@ gulp.task('build', function(done) {
     appName: appName,
     appVersion: pkg.version,
     version: '0.12.3',
-    files: './app/**',
+    files: ['./app/package.json', './app/*.html', './app/js/**', './app/css/**', './app/icons/**', './app/images/**', './app/libs/ui-aliens/dist/ui-aliens.min.inline.html', './app/libs/ui-aliens/dist/extra/**/**'],
     buildDir: TARGET,
     macIcns: './app/icons/gfmw.icns',
     winIco: './app/icons/gfmw.ico',
@@ -63,7 +63,7 @@ gulp.task('build.msi', ['build'], function(done) {
     executable: appName + '.exe',
     description: pkg.description,
     arch: 'x64',
-    localInstall: true
+    localInstall: false
   }, function (err) {
     if( err ) return gutil.log('msi-packager', err) && done(err) && false;
     
@@ -78,7 +78,7 @@ gulp.task('build.msi', ['build'], function(done) {
       executable: appName + '.exe',
       description: pkg.description,
       arch: 'x86',
-      localInstall: true
+      localInstall: false
     }, function (err) {
       if( err ) return gutil.log('msi-packager', err) && done(err) && false;
 
