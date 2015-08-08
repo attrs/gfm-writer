@@ -10,8 +10,8 @@
   },
   "main": "index.js",
   "author": "joje <joje.attrs@gmail.com>",
-  "homepage": "http://joje6.github.io/gfmw",
-  "repository": "joje6/gfmw",
+  "homepage": "http://attrs.github.io/gfmw",
+  "repository": "attrs/gfmw",
   "license": "MIT",
   "keywords": [
     "gfm",
